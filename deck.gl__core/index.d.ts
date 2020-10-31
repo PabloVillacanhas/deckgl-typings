@@ -1082,7 +1082,7 @@ declare module "@deck.gl/core/lib/layer" {
 
   		// General resources
   		mousePosition: [number,number] | null;
-  		
+
 		// GL Resources
 		gl: WebGL2RenderingContext;
 	}
@@ -1692,9 +1692,20 @@ declare module "@deck.gl/core/controllers/transition-manager" {
 		_onTransitionUpdate(transition: any): void;
 	}
 }
+
+//https://github.com/visgl/deck.gl/blob/master/docs/api-reference/core/controller.md
 declare module "@deck.gl/core/controllers/controller" {
+	export interface ControllerOptions {
+		scrollZoom?:boolean;
+		dragPan?: boolean;
+		dragRotate?:boolean;
+		doubleClickZoom?: boolean;
+		touchZoom?: boolean;
+		touchRotate?: boolean;
+		keyboard?: boolean;
+	}
 	export default class Controller {
-		constructor(ControllerState: any, options?: {});
+		constructor(ControllerState: any, options?: ControllerOptions);
 		set events(customEvents: any);
 		finalize(): void;
 		/**
@@ -2210,8 +2221,7 @@ declare module "@deck.gl/core/lib/tooltip" {
 	}
 }
 declare module "@deck.gl/core/lib/deck" {
-	import Controller from "@deck.gl/core/controllers/controller";
-	import ControllerOptions from "@deck.gl/core/controllers/controller";
+	import Controller, {ControllerOptions} from "@deck.gl/core/controllers/controller";
 	import Effect from "@deck.gl/core/lib/effect";
 	import Layer from "@deck.gl/core/lib/layer";
 	import View from "@deck.gl/core/views/view";
@@ -2243,7 +2253,7 @@ declare module "@deck.gl/core/lib/deck" {
 		maxPitch?: number;
 		maxZoom?: number;
 		minPitch?: number;
-		minZoom?: number;	  
+		minZoom?: number;
 	}
 
 	// https://github.com/visgl/deck.gl/blob/master/docs/developer-guide/view-state-transitions.md
@@ -2321,7 +2331,9 @@ declare module "@deck.gl/core/lib/deck" {
 		onBeforeRender?: (args: { gl: WebGLRenderingContext }) => void;
 		onAfterRender?: (args: { gl: WebGLRenderingContext }) => void;
 		onError?: (error: Error, source: any) => void;
-		_onMetrics?: (metrics: any) => void;
+    _onMetrics?: (metrics: any) => void;
+
+    ContextProvider?: React.Context<any>
 	}
 
 	export default class Deck {
